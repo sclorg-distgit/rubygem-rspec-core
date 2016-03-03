@@ -6,7 +6,7 @@
 %global	rpmminorver	.%(echo %preminorver | sed -e 's|^\\.\\.*||')
 %global	fullver	%{majorver}%{?preminorver}
 
-%global	fedorarel	3
+%global	fedorarel	4
 
 %global	gem_name	rspec-core
 
@@ -45,12 +45,12 @@ BuildRequires:	git
 %endif
 # Make the following installed by default
 # lib/rspec/core/rake_task
-Requires:	%{?scl_prefix}rubygem(rake)
+Requires:	   %{?scl_prefix_ruby}rubygem(rake)
 # Optional
 #Requires:	%{?scl_prefix}rubygem(ZenTest)
-#Requires:	%{?scl_prefix}rubygem(flexmock)
-#Requires:	%{?scl_prefix}rubygem(mocha)
-#Requires:	%{?scl_prefix}rubygem(rr)
+Requires:	   %{?scl_prefix}rubygem(flexmock)
+Requires:	   %{?scl_prefix}rubygem(mocha)
+Requires:	   %{?scl_prefix}rubygem(rr)
 BuildArch:	noarch
 Provides:      %{?scl_prefix}rubygem(%{gem_name}) = %{version}-%{release}
 
@@ -119,10 +119,8 @@ for ((i = 0; i < ${#FAILFILE[@]}; i++)) {
 }
 
 %{?scl:scl enable %{scl} - << \EOF}
-%{?scl:scl enable %{scl} - << \EOF}
 ruby -rubygems -Ilib/ -S exe/rspec || \
 	ruby -rubygems -Ilib/ -S exe/rspec --tag ~broken
-%{?scl:EOF}
 %{?scl:EOF}
 
 popd
@@ -147,7 +145,7 @@ popd
 %{gem_docdir}
 
 %changelog
-* Mon Feb 22 2016 Pavel Valena <pvalena@redhat.com> - 3.4.2-3
+* Mon Feb 22 2016 Pavel Valena <pvalena@redhat.com> - 3.4.2-4
 - Fix rubygem-rake Require prefix
 
 * Mon Feb 22 2016 Pavel Valena <pvalena@redhat.com> - 3.4.2-2
