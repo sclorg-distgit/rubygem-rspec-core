@@ -6,7 +6,7 @@
 %global	rpmminorver	.%(echo %preminorver | sed -e 's|^\\.\\.*||')
 %global	fullver	%{majorver}%{?preminorver}
 
-%global	fedorarel	2
+%global	fedorarel	3
 
 %global	gem_name	rspec-core
 
@@ -32,7 +32,7 @@ BuildRequires:	%{?scl_prefix_ruby}rubygems-devel
 %if 0%{?need_bootstrap_set} < 1
 BuildRequires:	%{?scl_prefix_ruby}rubygem(minitest)
 BuildRequires:	%{?scl_prefix}rubygem(nokogiri)
-BuildRequires:	%{?scl_prefix}rubygem(rake)
+BuildRequires:	%{?scl_prefix_ruby}rubygem(rake)
 BuildRequires:	%{?scl_prefix}rubygem(rspec)
 BuildRequires:	%{?scl_prefix}rubygem(aruba)
 # Newly
@@ -147,6 +147,9 @@ popd
 %{gem_docdir}
 
 %changelog
+* Mon Feb 22 2016 Pavel Valena <pvalena@redhat.com> - 3.4.2-3
+- Fix rubygem-rake Require prefix
+
 * Mon Feb 22 2016 Pavel Valena <pvalena@redhat.com> - 3.4.2-2
 - Update to 3.4.2
 
