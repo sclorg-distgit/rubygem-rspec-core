@@ -6,7 +6,7 @@
 %global	rpmminorver	.%(echo %preminorver | sed -e 's|^\\.\\.*||')
 %global	fullver	%{majorver}%{?preminorver}
 
-%global	fedorarel	4
+%global	fedorarel	5
 
 %global	gem_name	rspec-core
 
@@ -27,6 +27,9 @@ Source0:	http://rubygems.org/gems/%{gem_name}-%{fullver}.gem
 Source1:	rubygem-%{gem_name}-%{version}-full.tar.gz
 Source2:	rspec-related-create-full-tarball.sh
 
+Requires:       %{?scl_prefix_ruby}ruby(rubygems)
+Requires:       %{?scl_prefix}rubygem(rspec-support) => 3.4.0
+Requires:       %{?scl_prefix}rubygem(rspec-support) < 3.5
 BuildRequires:	%{?scl_prefix_ruby}ruby(release)
 BuildRequires:	%{?scl_prefix_ruby}rubygems-devel
 %if 0%{?need_bootstrap_set} < 1
@@ -145,6 +148,9 @@ popd
 %{gem_docdir}
 
 %changelog
+* Mon Feb 22 2016 Pavel Valena <pvalena@redhat.com> - 3.4.2-5
+- Add missing Requires
+
 * Mon Feb 22 2016 Pavel Valena <pvalena@redhat.com> - 3.4.2-4
 - Fix rubygem-rake Require prefix
 
