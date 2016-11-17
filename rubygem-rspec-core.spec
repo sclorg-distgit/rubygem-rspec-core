@@ -6,13 +6,13 @@
 %global	rpmminorver	.%(echo %preminorver | sed -e 's|^\\.\\.*||')
 %global	fullver	%{majorver}%{?preminorver}
 
-%global	fedorarel	5
+%global	fedorarel	6
 
 %global	gem_name	rspec-core
 
 # %%check section needs rspec-core, however rspec-core depends on rspec-mocks
 # runtime part of rspec-mocks does not depend on rspec-core
-%global	need_bootstrap_set	1
+%global	need_bootstrap_set	0
 
 Summary:	Rspec-2 runner and formatters
 Name:		%{?scl_prefix}rubygem-%{gem_name}
@@ -44,6 +44,10 @@ BuildRequires:	%{?scl_prefix}rubygem(mocha)
 BuildRequires:	%{?scl_prefix}rubygem(rr)
 BuildRequires:	%{?scl_prefix}rubygem(coderay)
 BuildRequires:	%{?scl_prefix}rubygem(thread_order)
+BuildRequires:	%{?scl_prefix}rubygem(builder)
+BuildRequires:	%{?scl_prefix}rubygem(gherkin)
+BuildRequires:	%{?scl_prefix}rubygem(multi_test)
+BuildRequires:	%{?scl_prefix}rubygem(ffi)
 BuildRequires:	git
 %endif
 # Make the following installed by default
@@ -98,6 +102,8 @@ rm -f %{buildroot}%{gem_instdir}/{.document,.yardopts}
 %if 0%{?need_bootstrap_set} < 1
 
 %check
+%{?scl:scl enable %{scl} - << \EOF}
+set -e
 LANG=en_US.UTF-8
 pushd %{gem_name}-%{version}
 # Test failure needs investigation...
@@ -124,12 +130,11 @@ for ((i = 0; i < ${#FAILFILE[@]}; i++)) {
 		${FAILFILE[$i]}
 }
 
-%{?scl:scl enable %{scl} - << \EOF}
 ruby -rubygems -Ilib/ -S exe/rspec || \
 	ruby -rubygems -Ilib/ -S exe/rspec --tag ~broken
-%{?scl:EOF}
 
 popd
+%{?scl:EOF}
 
 %endif
 
@@ -151,6 +156,12 @@ popd
 %{gem_docdir}
 
 %changelog
+* Thu Apr 07 2016 Pavel Valena <pvalena@redhat.com> - 3.4.2-6
+- Add rubygem-builder to BuildRequires
+- Add rubygem-gherkin to BuildRequires
+- Add rubygem-multi_test to BuildRequires
+- Add rubygem-ffi to BuildRequires
+
 * Mon Feb 22 2016 Pavel Valena <pvalena@redhat.com> - 3.4.2-5
 - Add missing Requires
 
